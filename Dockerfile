@@ -29,4 +29,8 @@ RUN \
     rm -rf /tmp/* /var/tmp/* /var/cache/apk/* /var/cache/distfiles/* && \
     chmod 600 /root/.ssh/config
 
+RUN sed -i '5 i sys.path.append(r"/bootstrap")' /usr/bin/bootstrap
+
+RUN pip install mkdocs-awesome-pages-plugin
+
 CMD ["/usr/bin/python3", "/bootstrap/main.py", "start"]

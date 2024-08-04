@@ -1,5 +1,5 @@
 import click
-from app.mkdocs import common
+import common
 
 """CLI commands interface
 

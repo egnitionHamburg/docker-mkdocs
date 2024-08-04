@@ -1,19 +1,36 @@
-version: '3'
-
 services:
+  oauth2-proxy:
+    container_name: mkdocs-oauth
+    image: quay.io/oauth2-proxy/oauth2-proxy:latest
+    ports:
+      - "2430:4180" #set host-port (curretly 2430)
+    environment:
+      - OAUTH2_PROXY_PROVIDER=github
+      - OAUTH2_PROXY_CLIENT_ID=  #set client-id for OAuth App
+      - OAUTH2_PROXY_CLIENT_SECRET=${MKDOCSROS_CLIENT_SECRET}
+      - OAUTH2_PROXY_COOKIE_SECRET=${MKDOCSROS_COOKIE_SECRET}
+      - OAUTH2_PROXY_EMAIL_DOMAINS=*
+      - OAUTH2_PROXY_REVERSE_PROXY=true
+      - OAUTH2_PROXY_REDIRECT_URL=http://localhost:2430/oauth2/callback #change url to final subdomain-url (without port if not localhost)
+      - OAUTH2_PROXY_UPSTREAM=http://mkdocs:8000
+      - OAUTH2_PROXY_HTTP_ADDRESS=http://0.0.0.0:4180
+      - OAUTH2_PROXY_CODE_CHALLENGE_METHOD=S256
+      - OAUTH2_PROXY_SET_XAUTHREQUEST=true
+    command:
+      - --http-address=0.0.0.0:4180
+      - --upstream=http://mkdocs:8000
+
   mkdocs:
     container_name: mkdocs
-    image: polinux/mkdocs:1.5.2
-    restart: always
-    ports:
-      - "8000:8000"
+    image: egn/mkdocs-ros:latest
     environment:
       LIVE_RELOAD_SUPPORT: 'true'
-      ADD_MODULES: 'fontawesome-markdown mkdocs-git-revision-date-localized-plugin mkdocs-material'
+      ADD_MODULES: 'fontawesome-markdown mkdocs-git-revision-date-localized-plugin mkdocs-material awesome-pages'
       FAST_MODE: 'true'
-      DOCS_DIRECTORY: '/mkdocs'
-      GIT_REPO: 'git@github.com:username/docs.git'
-      UPDATE_INTERVAL: 15
+      DOCS_DIRECTORY: '/repo'
+      GIT_REPO: 'git@github.com:egnitionHamburg/REPO.git' # set repo-name
+      UPDATE_INTERVAL: 10
       AUTO_UPDATE: 'true'
+      GIT_BRANCH: master
     volumes:
-      - $HOME/.ssh/id_rsa:/root/.ssh/id_rsa
+      - $HOME/.ssh/id_rsa:/root/.ssh/id_rsa #give path to privatekey that has access to repo

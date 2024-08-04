@@ -10,6 +10,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        bootstrap=app.cli:cli
+        bootstrap=cli:cli
     ''',
 )

@@ -23,7 +23,7 @@ def start():
         _clone_repo(repo)
     _check_previous_installation()
     print('Starting MKDocs')
-    os.chdir(docks_dir)
+    os.chdir(docks_dir + '/docs')
     if "DEV_ADDR" in os.environ:
         _dev_addr = os.environ['DEV_ADDR']
     else:
@@ -48,7 +48,7 @@ def _check_previous_installation():
     Creates empty documentation if none detected
     :return:
     """
-    if not os.path.exists(docks_dir + '/mkdocs.yml'):
+    if not os.path.exists(docks_dir + '/docs/mkdocs.yml'):
         print(colored(
             f'No documentation found in ({docks_dir}). Creating new one.', 'yellow'))
         if not os.path.exists(docks_dir):

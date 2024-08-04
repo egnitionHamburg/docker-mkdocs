@@ -1,0 +1,17 @@
+services:
+  mkdocs:
+    container_name: mkdocs
+    image: egn/mkdocs-ros:latest
+    ports:
+      - "4180:8000"
+    environment:
+      LIVE_RELOAD_SUPPORT: 'true'
+      ADD_MODULES: 'fontawesome-markdown mkdocs-git-revision-date-localized-plugin mkdocs-material awesome-pages'
+      FAST_MODE: 'true'
+      DOCS_DIRECTORY: '/repo'
+      GIT_REPO: 'git@github.com:egnitionHamburg/REPO.git' # set repo-name
+      UPDATE_INTERVAL: 5
+      AUTO_UPDATE: 'true'
+      GIT_BRANCH: master
+    volumes:
+      - $HOME/.ssh/id_rsa:/root/.ssh/id_rsa #give path to privatekey that has access to repo
